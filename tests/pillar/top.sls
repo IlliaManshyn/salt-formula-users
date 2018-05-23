@@ -1,4 +1,4 @@
-base:
+users:
   "minion-ubuntu":
     - users.ubuntu
   

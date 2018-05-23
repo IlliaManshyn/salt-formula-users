@@ -1,0 +1,4 @@
+{% set user = salt['grains.filter_by']({
+	'Debian': { 'name': 'ubuntu', 'source' : 'salt://ubuntu.pem.pub'},
+	'RedHat': { 'name': 'centos', 'source' : 'salt://centos.pem.pub' },
+}, default='Debian') %}
