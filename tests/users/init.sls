@@ -1,27 +1,32 @@
 {% from "map.jinja" import user with context %}
 
-{{ salt['pillar.get']('users:name') }}: 
+{{ salt['pillar.get']('user:name') }}: 
  group.present:
-  - name: {{ salt['pillar.get']('users:group') }} 
-  - gid: {{ salt['pillar.get']('users:gid') }} 
+  - name: {{ salt['pillar.get']('group:name') }} 
+  - gid: {{ salt['pillar.get']('group:gid') }} 
 
  user.present:
-  - name: {{ salt['pillar.get']('users:name') }}
-  - home: /home/{{ salt['pillar.get']('users:name') }}
-  - uid: {{ salt['pillar.get']('users:uid') }}
+  - name: {{ user.name }}
+  - home: {{ salt['pillar.get']('user:home') }}
+  - uid: {{ salt['pillar.get']('user:uid') }}
+  - groups: {{ salt['pillar.get']('user:groups') }}
+
+{{ user.user_to_del }}:
+   user.absent
+ 
+{{ user.ssh_pkg }}:
+  pkg.installed
 
 sshkeys: 
  ssh_auth.present:
-  - user: {{ salt['pillar.get']('users:uid') }}
+  - user: {{ salt['pillar.get']('user:name') }}
   - source: {{ user.source }}
-  - config: '%h/.ssh/authorized_keys'
+  - config: '/home/{{ salt['pillar.get']('user:name') }}/.ssh/authorized_keys'
 
-{% if user.get('sudo', false) %}
-/etc/sudoers.d/{{ salt['pillar.get']('users:name') }}:
+/etc/sudoers.d/{{ salt['pillar.get']('user:name') }}:
  file.managed:
   - source: salt://templates/sudoers.d.jinja2
-  - templates: jinja
+  - template: jinja
   - context:
-      user_name: {{ salt['pillar.get']('users:name') }}
-{% endif -%}
+      user_name: {{ salt['pillar.get']('user:name') }}
 
