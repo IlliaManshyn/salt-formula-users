@@ -6,23 +6,28 @@
   - gid: {{ salt['pillar.get']('group:gid') }} 
 
  user.present:
-  - name: {{ user.name }}
+  - name: {{ salt['pillar.get']('user:name') }}
   - home: {{ salt['pillar.get']('user:home') }}
   - uid: {{ salt['pillar.get']('user:uid') }}
   - groups: {{ salt['pillar.get']('user:groups') }}
 
-{{ user.user_to_del }}:
+{{ salt['pillar.get']('user_to_del:name') }}:
   user.absent:
    - purge: true
  
 {{ user.ssh_pkg }}:
   pkg.installed
 
-sshkeys: 
+ssh_public_keys: 
  ssh_auth.present:
   - user: {{ salt['pillar.get']('user:name') }}
-  - source: {{ user.source }}
+  - source: {{ user.public_key_source }}
   - config: '/home/{{ salt['pillar.get']('user:name') }}/.ssh/authorized_keys'
+
+{{ salt['pillar.get']('user:home') }}/.ssh/{{ salt['pillar.get']('user:name') }}.pem:
+ file.managed:
+  - source: 
+     - {{ user.private_key_source}}
 
 /etc/sudoers.d/{{ salt['pillar.get']('user:name') }}:
  file.managed:

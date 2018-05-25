@@ -9,4 +9,6 @@ user:
   - groups:
     - sudoers
 
+user_to_del:
+ - name: redhat
 

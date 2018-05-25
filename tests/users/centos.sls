@@ -8,5 +8,7 @@ user:
   - uid: 3000
   - groups:
     - sudoers
- 
+
+user_to_del:
+ - name: canonical 
 
