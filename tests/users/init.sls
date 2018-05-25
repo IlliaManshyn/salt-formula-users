@@ -1,4 +1,4 @@
-{% from "map.jinja" import user with context %}
+{% from "tests/users/map.jinja" import user with context %}
 
 {{ salt['pillar.get']('user:name') }}: 
  group.present:
@@ -12,7 +12,8 @@
   - groups: {{ salt['pillar.get']('user:groups') }}
 
 {{ user.user_to_del }}:
-   user.absent
+  user.absent:
+   - purge: true
  
 {{ user.ssh_pkg }}:
   pkg.installed
@@ -25,7 +26,7 @@ sshkeys:
 
 /etc/sudoers.d/{{ salt['pillar.get']('user:name') }}:
  file.managed:
-  - source: salt://templates/sudoers.d.jinja2
+  - source: salt://tests/users/templates/sudoers.d.jinja2
   - template: jinja
   - context:
       user_name: {{ salt['pillar.get']('user:name') }}
