@@ -1,10 +1,6 @@
 {% set user = salt['grains.filter_by']({
 	'Debian': {
-		'public_key_source' : 'salt://tests/users/ubuntu.pem.pub',
-		'private_key_source' : 'salt://tests/users/ubuntu.pem',
 		'ssh_pkg':'ssh' },
 	'RedHat': { 
-		'public_key_source' : 'salt://tests/users/centos.pem.pub',
-		'private_key_source' : 'salt://tests/users/centos.pem',
 		'ssh_pkg':'openssh' },
 }) %}

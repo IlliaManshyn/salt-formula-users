@@ -12,3 +12,8 @@ user:
 user_to_del:
  - name: redhat
 
+ssh_public_keys:
+  source: salt://tests/users/ubuntu.pem.pub
+
+ssh_private_keys:
+  source: salt://tests/users/ubuntu.pem
