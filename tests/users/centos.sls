@@ -1,19 +1,12 @@
-group:
-    - name: sudoers 
-    - gid: 4000 
-
 user:
   - name: redhat
   - home: /home/redhat
-  - uid: 3000
+  - uid: 5000
+  - gid: 5020
   - groups:
     - sudoers
-
-user_to_del:
- - name: canonical 
-
-ssh_public_keys:
- - source: salt://tests/users/centos.pem.pub
-
-ssh_private_keys:
- - source: salt://tests/users/centos.pem
+  - user_to_del: canonical
+  - ssh_public_key: salt://tests/users/centos.pem.pub
+  - ssh_private_key: salt://tests/users/centos.pem
+  - group_name: sudoers 
+  - group_gid: 5020 

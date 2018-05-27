@@ -6,7 +6,7 @@ file_roots:
      - /home/user_name/salt-formula-users
 
 To add pillar root-dir: 
-pillar_roots:
+pillar_rxoots:
  base:
   - /home/user_name/salt-formula-users/tests/pillar
  users:
@@ -22,17 +22,16 @@ Set user data by changing args in ID: user
 	uid: - to set user id
 	gid: - to set group id for user
 	groups: - to add user in groups
+To create group:
+	group_name: - to set group name
+	group_gid: - to set group id
 
-Set group data by changing args in ID: group
-	name: - to set group name
-	gid: - to set group id
+Delete any user:
+	user_to_del: - to set username
 
-Delete any user by changing args in ID: user_to_del
-	name: - to set username
+Set path to ssh public key:
+	ssh_public_key: - path to public key from salt root dir
 
-Set path to ssh public key by changing args in ID: ssh_public_keys
-	source: - path to public key from salt root dir
-
-Set path to ssh private key by changing args in ID: ssh_public_keys
-        source: - path to private key from salt root dir
+Set path to ssh private key:
+	ssh_public_keys: - path to private key from salt root dir
 
