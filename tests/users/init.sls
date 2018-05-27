@@ -1,40 +1,66 @@
 {% from "tests/users/map.jinja" import user with context %}
 
-{{ salt['pillar.get']('user:user_to_del') }}:
-  user.absent:
-   - purge: true
-
-{{ salt['pillar.get']('user:name') }}: 
- group.present:
-  - name: {{ salt['pillar.get']('user:group_name') }} 
-  - gid: {{ salt['pillar.get']('user:group_gid') }} 
-
- user.present:
-  - name: {{ salt['pillar.get']('user:name') }}
-  - home: {{ salt['pillar.get']('user:home') }}
-  - uid: {{ salt['pillar.get']('user:uid') }}
-  - gid: {{ salt['pillar.get']('user:gid') }}
-  - groups: {{ salt['pillar.get']('user:groups') }}
- 
-
- 
 {{ user.ssh_pkg }}:
   pkg.installed
 
-ssh_public_keys: 
+{% for name, user in pillar.get('user', {}).items() %}
+{% if 'user_to_del' in user %}
+{{ user['user_to_del'] }}:
+  user.absent:
+   - purge: true
+{% endif %}
+
+{{ name }}: 
+ group.present:
+{% if 'group_name' in user %}
+  - name: {{ user['group_name'] }} 
+{% if 'group_gid' in user %}
+  - gid: {{ user['group_gid'] }} 
+{% endif %}
+{% endif %}
+
+
+ user.present:
+  - name: {{ name  }}
+{% if 'home' in user %}
+  - home: {{ user['home'] }}
+{% endif %}
+{% if 'uid' in user %}
+  - uid: {{ user['uid'] }}
+{% endif  %}
+{% if 'gid' in user %}
+  - gid: {{ user['gid'] }}
+{% endif %}
+{% if 'groups' in user %}
+  - groups: {{ user['groups'] }}
+{% endif %}
+{% if 'home' in user %}
+{% if 'ssh_key_path' in user %}
+{% if 'ssh_public_key' in user %}
+{%  for public_key in user.get('ssh_public_key', [])  %}
+{{public_key}}: 
  ssh_auth.present:
-  - user: {{ salt['pillar.get']('user:name') }}
-  - source: {{ salt['pillar.get']('user:ssh_public_key') }}
-  - config: '{{ salt['pillar.get']('user:home') }}/.ssh/authorized_keys'
+  - user: {{ name  }} 
+  - source: {{ user['ssh_key_path']}}/{{ public_key }}
+  - config: '{{ user['home'] }}/.ssh/authorized_keys'
+{% endfor %}
+{% endif %}
 
-{{ salt['pillar.get']('user:home') }}/.ssh/{{ salt['pillar.get']('user:name') }}.pem:
+{% if 'ssh_private_key' in user %}
+{% for private_key in user.get('ssh_private_key', []) %}
+{{ user['home'] }}/.ssh/{{ private_key }}:
  file.managed:
-  - source: {{ salt['pillar.get']('user:ssh_private_key') }}
+  - source: {{ user['ssh_key_path'] }}/{{ private_key }}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endif %}
 
-/etc/sudoers.d/{{ salt['pillar.get']('user:name') }}:
+/etc/sudoers.d/{{ name }}:
  file.managed:
   - source: salt://tests/users/templates/sudoers.d.jinja2
   - template: jinja
   - context:
-      user_name: {{ salt['pillar.get']('user:name') }}
+      user_name: {{ name }}
+{% endfor %}
 
