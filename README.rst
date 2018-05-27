@@ -6,7 +6,7 @@ file_roots:
      - /home/user_name/salt-formula-users
 
 To add pillar root-dir: 
-pillar_rxoots:
+pillar_roots:
  base:
   - /home/user_name/salt-formula-users/tests/pillar
  users:
