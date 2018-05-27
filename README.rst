@@ -9,8 +9,7 @@ To add pillar root-dir:
 pillar_roots:
  base:
   - /home/user_name/salt-formula-users/tests/pillar
- users:
-  - /home/user_name/salt-formula-users/tests
+
 
 To start formula use following command:
 salt "*" state.sls tests.users.init
