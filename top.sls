@@ -1,3 +1,3 @@
 base:
  '*':
-   - tests.users.init
+   - users.init
