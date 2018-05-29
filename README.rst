@@ -12,7 +12,7 @@ pillar_roots:
 
 
 To start formula use following command:
-salt "*" state.sls tests.users.init
+salt "*" state.sls users.init
 
 In pillars you can: 
 Set user data by changing args in ID: user
