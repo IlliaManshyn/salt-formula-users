@@ -1,4 +1,4 @@
-{% from "tests/users/map.jinja" import user with context %}
+{% from "users/map.jinja" import user with context %}
 
 {{ user.ssh_pkg }}:
   pkg.installed
