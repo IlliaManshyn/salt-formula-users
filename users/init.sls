@@ -1,4 +1,4 @@
-{% from "tests/users/map.jinja" import user with context %}
+{% from "users/map.jinja" import user with context %}
 
 {{ user.ssh_pkg }}:
   pkg.installed
@@ -58,7 +58,7 @@
 
 /etc/sudoers.d/{{ name }}:
  file.managed:
-  - source: salt://tests/users/templates/sudoers.d.jinja2
+  - source: salt://users/templates/sudoers.d.jinja2
   - template: jinja
   - context:
       user_name: {{ name }}
